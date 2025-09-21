@@ -31,13 +31,22 @@ End the program and close the output video window by pressing 'q'.
 
 ## i) Write the frame as JPG file
 ```
+
+## i) Write the frame as JPG file
 import cv2
-import numpy as np
-viedoCaptureObject=cv2.VideoCapture(0)
-ret,frame=viedoCaptureObject.read()
-cv2.imwrite("captured_frame.jpg",frame)
-viedoCaptureObject.release()
-cv2.destroyAllWindows()
+import matplotlib.pyplot as plt
+from IPython.display import clear_output
+import time
+cap = cv2.VideoCapture(0)
+ret, frame = cap.read()
+if ret:
+    cv2.imwrite("captured_frame.jpg", frame)
+cap.release()
+captured_image = cv2.imread('captured_frame.jpg')
+plt.imshow(captured_image[:,:,::-1])
+plt.title('Captured Frame')
+plt.axis('off')
+plt.show()
 ```
 
 
@@ -45,11 +54,19 @@ cv2.destroyAllWindows()
 ## ii) Display the video
 ```
 cap = cv2.VideoCapture(0)
-ret, frame = cap.read()
-cv2.imshow('captured_frame', frame)
-cv2.waitKey(10000)
+
+for i in range(50):
+    ret, frame = cap.read()
+    if not ret:
+        break
+    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    clear_output(wait=True)
+    plt.imshow(frame_rgb)
+    plt.axis('off')
+    plt.show()
+    time.sleep(0.05)
+
 cap.release()
-cv2.destroyAllWindows()
 ```
 
 
@@ -57,22 +74,21 @@ cv2.destroyAllWindows()
 ## iii) Display the video by resizing the window
 
 ```
-cap=cv2.VideoCapture(0)
-ret,frame=cap.read()
-width=int(cap.get(3))
-height=int(cap.get(4))
-image=np.zeros(frame.shape,np.uint8)
-smaller_frame=cv2.resize(frame,(0,0),fx=0.5,fy=0.5)
-image[:height//2, :width//2]=smaller_frame
-image[height//2:, :width//2]=smaller_frame
-image[:height//2, width//2:]=smaller_frame
-image[height//2:, width//2:]=smaller_frame
-cv2.imshow('',image)
-cv2.waitKey(5000)  
-image_dict = {'captured_image1': image}
-cv2.imwrite('captured_image1.jpg', image)
+cap = cv2.VideoCapture(0)
+
+for i in range(50):
+    ret, frame = cap.read()
+    if not ret:
+        break
+    resized_frame = cv2.resize(frame, (100, 150))  # Resize to 320x240
+    frame_rgb = cv2.cvtColor(resized_frame, cv2.COLOR_BGR2RGB)
+    clear_output(wait=True)
+    plt.imshow(frame_rgb)
+    plt.axis('off')
+    plt.show()
+    time.sleep(0.05)
+
 cap.release()
-cv2.destroyAllWindows()
 ```
 
 
@@ -81,22 +97,21 @@ cv2.destroyAllWindows()
 
 
 ```
-cap=cv2.VideoCapture(0)
-ret,frame=cap.read()
-width=int(cap.get(3))
-height=int(cap.get(4))
-image=np.zeros(frame.shape,np.uint8)
-smaller_frame=cv2.resize(frame,(0,0),fx=0.5,fy=0.5)
-image[:height//2, :width//2]=cv2.rotate(smaller_frame,cv2.ROTATE_180)
-image[height//2:, :width//2]=smaller_frame
-image[:height//2, width//2:]=cv2.rotate(smaller_frame,cv2.ROTATE_180)
-image[height//2:, width//2:]=smaller_frame
-cv2.imshow('',image)
-cv2.waitKey(5000) 
-image_dict = {'captured_image2': image}
-cv2.imwrite('captured_image2.jpg', image)
+cap = cv2.VideoCapture(0)
+
+for i in range(50):
+    ret, frame = cap.read()
+    if not ret:
+        break
+    rotated_frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
+    frame_rgb = cv2.cvtColor(rotated_frame, cv2.COLOR_BGR2RGB)
+    clear_output(wait=True)
+    plt.imshow(frame_rgb)
+    plt.axis('off')
+    plt.show()
+    time.sleep(0.05)
+
 cap.release()
-cv2.destroyAllWindows()
 
 
 
